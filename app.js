@@ -116,6 +116,30 @@ function generatePlaceholder(word) {
     return firstLetter + dots;
 }
 
+// Calculate correctness percentage (character-by-character)
+function calculateCorrectnessPercentage(userWord, correctWord) {
+    if (!userWord || !correctWord || userWord.length === 0) return 0;
+    
+    const userLower = userWord.toLowerCase();
+    const correctLower = correctWord.toLowerCase();
+    const maxLength = Math.max(userLower.length, correctLower.length);
+    
+    if (maxLength === 0) return 100;
+    
+    let correctChars = 0;
+    const minLength = Math.min(userLower.length, correctLower.length);
+    
+    // Count correct characters in matching positions
+    for (let i = 0; i < minLength; i++) {
+        if (userLower[i] === correctLower[i]) {
+            correctChars++;
+        }
+    }
+    
+    // Calculate percentage based on the correct word length
+    return Math.round((correctChars / correctLower.length) * 100);
+}
+
 // Create word placeholder element
 function createWordPlaceholder(wordData, index) {
     const placeholder = document.createElement('span');
@@ -229,10 +253,40 @@ function startEditingWord(placeholderElement, index) {
             newPlaceholder.classList.add('warning');
         }
         
-        if (userWord) {
-            newPlaceholder.textContent = userWord + punctuation;
+        // Calculate and display correctness percentage
+        let correctnessPercentage = 0;
+        if (userWord && correctWord) {
+            correctnessPercentage = calculateCorrectnessPercentage(userWord, correctWord);
+        }
+        
+        // Set text content - use innerHTML or create structure that preserves badge
+        const textContent = userWord ? (userWord + punctuation) : (generatePlaceholder(correctWord) + punctuation);
+        
+        // Create correctness badge first if needed
+        if (userWord && correctnessPercentage > 0) {
+            const badgeContainer = document.createElement('span');
+            badgeContainer.className = 'correctness-badge';
+            badgeContainer.textContent = correctnessPercentage + '%';
+            badgeContainer.style.display = 'block';
+            
+            // Color based on percentage
+            if (correctnessPercentage === 100) {
+                badgeContainer.style.backgroundColor = '#4caf50';
+                badgeContainer.style.color = 'white';
+            } else if (correctnessPercentage >= 70) {
+                badgeContainer.style.backgroundColor = '#ff9800';
+                badgeContainer.style.color = 'white';
+            } else {
+                badgeContainer.style.backgroundColor = '#f44336';
+                badgeContainer.style.color = 'white';
+            }
+            
+            // Set text content and append badge
+            newPlaceholder.innerHTML = textContent;
+            newPlaceholder.appendChild(badgeContainer);
         } else {
-            newPlaceholder.textContent = generatePlaceholder(correctWord) + punctuation;
+            // No badge needed, just set text
+            newPlaceholder.textContent = textContent;
         }
         
         newPlaceholder.addEventListener('click', () => {
@@ -352,14 +406,14 @@ function checkAnswer() {
         const correctWord = correctWordData.word.toLowerCase();
         if (userWord === correctWord) {
             element.classList.add('correct');
-            element.classList.remove('incorrect');
+            element.classList.remove('incorrect', 'warning');
         } else if (userWord) {
             element.classList.add('incorrect');
-            element.classList.remove('correct');
+            element.classList.remove('correct', 'warning');
             allCorrect = false;
         } else {
             // Word not filled in
-            element.classList.remove('correct', 'incorrect');
+            element.classList.remove('correct', 'incorrect', 'warning');
             allCorrect = false;
         }
     });
@@ -387,6 +441,11 @@ function checkAnswer() {
     // Disable all word placeholders
     wordElements.forEach(element => {
         element.style.pointerEvents = 'none';
+        // Hide correctness badges after checking
+        const badge = element.querySelector('.correctness-badge');
+        if (badge) {
+            badge.style.display = 'none';
+        }
     });
 }
 

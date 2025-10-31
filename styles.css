@@ -171,7 +171,9 @@ header h1 {
 }
 
 .word-placeholder {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: 12px 18px;
     font-size: 24px;
     font-weight: 600;
@@ -187,9 +189,7 @@ header h1 {
     user-select: none;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    position: relative;
 }
 
 .word-placeholder:hover {
@@ -220,6 +220,30 @@ header h1 {
     border-color: #ff9800;
     background: #fff8e1;
     color: #ff9800;
+}
+
+/* Ensure incorrect overrides warning when both are present */
+.word-placeholder.warning.incorrect {
+    border-color: #f44336 !important;
+    background: #fff5f5 !important;
+    color: #f44336 !important;
+}
+
+.correctness-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 10px;
+    line-height: 1.2;
+    z-index: 10;
+    min-width: 28px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+    white-space: nowrap;
 }
 
 .word-input {
@@ -427,6 +451,14 @@ header h1 {
         padding: 10px 14px;
         min-height: 44px;
         min-width: 50px;
+    }
+    
+    .correctness-badge {
+        font-size: 9px;
+        padding: 2px 5px;
+        top: -6px;
+        right: -6px;
+        min-width: 24px;
     }
     
     .word-input {
