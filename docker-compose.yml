@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  finnish-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.node
+    ports:
+      - "9000:9000"
+    restart: unless-stopped
+

@@ -1,0 +1,20 @@
+FROM node:18-alpine
+
+# Install git
+RUN apk add --no-cache git
+
+# Set working directory
+WORKDIR /app
+
+# Clone the repository
+RUN git clone https://github.com/StanDmitrievAiven/finnish-sentence-game-for-exam.git .
+
+# Install http-server globally
+RUN npm install -g http-server
+
+# Expose port 9000
+EXPOSE 9000
+
+# Start http-server on port 9000
+CMD ["http-server", ".", "-p", "9000", "--cors"]
+
