@@ -3,6 +3,9 @@ FROM nginx:alpine
 # Install git
 RUN apk add --no-cache git
 
+# Remove default nginx html directory
+RUN rm -rf /usr/share/nginx/html/*
+
 # Clone the repository
 RUN git clone https://github.com/StanDmitrievAiven/finnish-sentence-game-for-exam.git /usr/share/nginx/html
 
