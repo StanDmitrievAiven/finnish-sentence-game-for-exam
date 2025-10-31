@@ -12,6 +12,8 @@ body {
     justify-content: center;
     align-items: center;
     padding: 20px;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
 }
 
 .container {
@@ -28,6 +30,12 @@ header {
     color: white;
     padding: 30px;
     text-align: center;
+}
+
+header h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    word-wrap: break-word;
 }
 
 .subtitle {
@@ -52,6 +60,12 @@ header {
     transition: all 0.3s ease;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border: 2px solid transparent;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .category-card:hover {
@@ -91,6 +105,9 @@ header {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    min-height: 44px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .back-btn:hover {
@@ -122,6 +139,8 @@ header {
     align-items: center;
     font-size: 16px;
     font-weight: 500;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
 .score {
@@ -163,8 +182,14 @@ header {
     cursor: pointer;
     transition: all 0.2s ease;
     min-width: 60px;
+    min-height: 44px;
     text-align: center;
     user-select: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .word-placeholder:hover {
@@ -200,7 +225,7 @@ header {
 .word-input {
     display: inline-block;
     padding: 12px 18px;
-    font-size: 24px;
+    font-size: 16px; /* Default mobile size to prevent iOS zoom */
     font-weight: 600;
     color: #333;
     background: white;
@@ -210,10 +235,21 @@ header {
     min-width: 60px;
     text-align: center;
     font-family: inherit;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    touch-action: manipulation;
 }
 
 .word-input:focus {
     box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+
+/* Larger font on tablets and desktop */
+@media (min-width: 481px) {
+    .word-input {
+        font-size: 24px;
+    }
 }
 
 .english-text {
@@ -245,6 +281,9 @@ header {
     cursor: pointer;
     transition: all 0.3s ease;
     width: 100%;
+    min-height: 44px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .check-btn:hover {
@@ -299,6 +338,7 @@ header {
     display: flex;
     gap: 15px;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 .next-btn, .restart-btn {
@@ -311,6 +351,10 @@ header {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    min-height: 44px;
+    min-width: 120px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .next-btn:hover, .restart-btn:hover {
@@ -327,27 +371,183 @@ header {
     background: #f57c00;
 }
 
+/* Mobile optimizations */
 @media (max-width: 600px) {
+    body {
+        padding: 10px;
+        align-items: flex-start;
+        padding-top: 10px;
+    }
+    
+    .container {
+        max-width: 100%;
+        border-radius: 15px;
+        margin: 0;
+    }
+    
+    header {
+        padding: 20px 15px;
+    }
+    
     header h1 {
-        font-size: 24px;
+        font-size: 22px;
+        margin-bottom: 8px;
+    }
+    
+    .subtitle {
+        font-size: 14px;
+    }
+    
+    .stats {
+        font-size: 14px;
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .score {
+        font-size: 12px;
     }
     
     .card {
-        padding: 25px;
+        padding: 20px 15px;
+    }
+    
+    .card-content {
+        gap: 20px;
+    }
+    
+    .words-container {
+        padding: 20px 15px;
+        gap: 10px;
+        min-height: 80px;
     }
     
     .word-placeholder {
         font-size: 18px;
         padding: 10px 14px;
+        min-height: 44px;
+        min-width: 50px;
     }
     
     .word-input {
         font-size: 18px;
         padding: 10px 14px;
+        min-height: 44px;
     }
     
     .english-text {
         font-size: 16px;
+        padding: 12px;
+    }
+    
+    .check-btn {
+        padding: 14px 20px;
+        font-size: 16px;
+    }
+    
+    .controls {
+        padding: 15px 15px 25px;
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .back-btn, .next-btn, .restart-btn {
+        width: 100%;
+        padding: 14px 20px;
+    }
+    
+    .categories-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 20px 15px;
+    }
+    
+    .category-card {
+        padding: 20px;
+        min-height: 80px;
+    }
+    
+    .category-card h3 {
+        font-size: 16px;
+    }
+    
+    .result {
+        font-size: 18px;
+        padding: 12px;
+    }
+    
+    .correct-answer {
+        font-size: 16px;
+        padding: 12px;
+    }
+    
+    .progress-bar {
+        margin-bottom: 12px;
+    }
+    
+    .category-badge {
+        font-size: 12px;
+        padding: 4px 12px;
+        margin-top: 8px;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 400px) {
+    header h1 {
+        font-size: 20px;
+    }
+    
+    .word-placeholder {
+        font-size: 16px;
+        padding: 8px 12px;
+    }
+    
+    .word-input {
+        font-size: 16px;
+        padding: 8px 12px;
+    }
+    
+    .english-text {
+        font-size: 14px;
+    }
+    
+    .stats {
+        font-size: 12px;
+    }
+}
+
+/* Prevent hover effects on touch devices */
+@media (hover: none) and (pointer: coarse) {
+    .category-card:hover {
+        transform: none;
+    }
+    
+    .word-placeholder:hover {
+        transform: none;
+        background: white;
+    }
+    
+    .check-btn:hover,
+    .back-btn:hover,
+    .next-btn:hover,
+    .restart-btn:hover {
+        transform: none;
+    }
+    
+    .category-card:active {
+        transform: scale(0.98);
+    }
+    
+    .word-placeholder:active {
+        transform: scale(0.95);
+    }
+    
+    .check-btn:active,
+    .back-btn:active,
+    .next-btn:active,
+    .restart-btn:active {
+        transform: scale(0.98);
     }
 }
 
