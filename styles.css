@@ -191,6 +191,12 @@ header {
     color: #f44336;
 }
 
+.word-placeholder.warning {
+    border-color: #ff9800;
+    background: #fff8e1;
+    color: #ff9800;
+}
+
 .word-input {
     display: inline-block;
     padding: 12px 18px;

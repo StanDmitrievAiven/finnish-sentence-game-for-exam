@@ -136,6 +136,7 @@ function createWordPlaceholder(wordData, index) {
     placeholder.dataset.index = index;
     placeholder.dataset.correctWord = wordData.word.toLowerCase();
     placeholder.dataset.punctuation = wordData.punctuation;
+    placeholder.dataset.wordLength = wordData.word.length; // Store correct word length
     
     placeholder.addEventListener('click', () => {
         if (currentCardAnswered) return;
@@ -151,6 +152,7 @@ function startEditingWord(placeholderElement, index) {
     
     const correctWord = placeholderElement.dataset.correctWord;
     const punctuation = placeholderElement.dataset.punctuation || '';
+    const wordLength = parseInt(placeholderElement.dataset.wordLength) || 0;
     
     // Create input element
     const input = document.createElement('input');
@@ -158,6 +160,7 @@ function startEditingWord(placeholderElement, index) {
     input.className = 'word-input';
     input.value = placeholderElement.dataset.userInput || '';
     input.dataset.index = index;
+    input.maxLength = wordLength; // Enforce exact length
     
     // Set initial size based on placeholder, but allow growth
     const minWidth = Math.max(placeholderElement.offsetWidth, 80);
@@ -166,6 +169,20 @@ function startEditingWord(placeholderElement, index) {
     
     // Auto-resize input as user types
     input.addEventListener('input', () => {
+        // Limit input to exact word length
+        if (input.value.length > wordLength) {
+            input.value = input.value.substring(0, wordLength);
+        }
+        
+        // Visual feedback: green border when word length matches
+        if (input.value.length === wordLength && wordLength > 0) {
+            input.style.borderColor = '#4caf50';
+            input.style.backgroundColor = '#f1f8f4';
+        } else {
+            input.style.borderColor = '#667eea';
+            input.style.backgroundColor = 'white';
+        }
+        
         const tempSpan = document.createElement('span');
         tempSpan.style.visibility = 'hidden';
         tempSpan.style.position = 'absolute';
@@ -176,6 +193,15 @@ function startEditingWord(placeholderElement, index) {
         const newWidth = Math.max(tempSpan.offsetWidth + 36, minWidth); // 36 for padding
         input.style.width = newWidth + 'px';
         document.body.removeChild(tempSpan);
+    });
+    
+    // Prevent paste of text longer than maxLength
+    input.addEventListener('paste', (e) => {
+        e.preventDefault();
+        const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+        const truncatedText = pastedText.substring(0, wordLength);
+        input.value = truncatedText;
+        input.dispatchEvent(new Event('input'));
     });
     
     // Replace placeholder with input
@@ -192,6 +218,16 @@ function startEditingWord(placeholderElement, index) {
         newPlaceholder.dataset.correctWord = correctWord;
         newPlaceholder.dataset.punctuation = punctuation;
         newPlaceholder.dataset.userInput = userWord;
+        newPlaceholder.dataset.wordLength = placeholderElement.dataset.wordLength;
+        
+        // Check if word length requirement is met
+        const userWordLength = userWord.length;
+        const requiredLength = parseInt(placeholderElement.dataset.wordLength) || 0;
+        
+        // Add warning class if word is entered but length doesn't match
+        if (userWord && userWordLength !== requiredLength && requiredLength > 0) {
+            newPlaceholder.classList.add('warning');
+        }
         
         if (userWord) {
             newPlaceholder.textContent = userWord + punctuation;
@@ -201,6 +237,8 @@ function startEditingWord(placeholderElement, index) {
         
         newPlaceholder.addEventListener('click', () => {
             if (currentCardAnswered) return;
+            // Remove warning class when editing again
+            newPlaceholder.classList.remove('warning');
             startEditingWord(newPlaceholder, index);
         });
         
