@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finnish Learning Cards</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Home Page -->
+    <div class="container" id="homePage">
+        <header>
+            <h1>🇫🇮 Finnish Learning Cards</h1>
+            <p class="subtitle">Choose a category to practice</p>
+        </header>
+        <div class="categories-grid" id="categoriesGrid"></div>
+    </div>
+
+    <!-- Card Practice Page -->
+    <div class="container" id="practicePage" style="display: none;">
+        <header>
+            <h1>🇫🇮 Finnish Learning Cards</h1>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="stats">
+                <span id="currentCard">1</span> / <span id="totalCards">0</span>
+                <span class="score">✓ <span id="correct">0</span> | ✗ <span id="incorrect">0</span></span>
+            </div>
+            <div class="category-badge" id="categoryBadge"></div>
+        </header>
+
+        <div class="card" id="card">
+            <div class="card-content">
+                <div class="words-container" id="wordsContainer"></div>
+                <div class="english-text" id="englishText"></div>
+                <div class="input-container">
+                    <button id="checkButton" class="check-btn">Check</button>
+                </div>
+                <div class="result" id="result"></div>
+                <div class="correct-answer" id="correctAnswer"></div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="backButton" class="back-btn">← Back to Categories</button>
+            <button id="nextButton" class="next-btn" style="display: none;">Next Card →</button>
+            <button id="restartButton" class="restart-btn" style="display: none;">Restart Session</button>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+

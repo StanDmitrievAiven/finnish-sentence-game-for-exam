@@ -1,0 +1,347 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 700px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+.subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 16px;
+    margin-top: -10px;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 40px;
+}
+
+.category-card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 2px solid transparent;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    border-color: #667eea;
+}
+
+.category-card h3 {
+    color: #667eea;
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.category-card .count {
+    color: #999;
+    font-size: 14px;
+}
+
+.category-badge {
+    margin-top: 10px;
+    padding: 5px 15px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    font-size: 14px;
+    display: inline-block;
+}
+
+.back-btn {
+    padding: 15px 30px;
+    background: #999;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    background: #777;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(153, 153, 153, 0.4);
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: white;
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 4px;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.score {
+    font-size: 14px;
+}
+
+.card {
+    padding: 40px;
+}
+
+.card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.words-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+    background: #f7f9fc;
+    border-radius: 12px;
+    border: 2px dashed #667eea;
+    min-height: 100px;
+}
+
+.word-placeholder {
+    display: inline-block;
+    padding: 12px 18px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #667eea;
+    background: white;
+    border: 2px solid #667eea;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 60px;
+    text-align: center;
+    user-select: none;
+}
+
+.word-placeholder:hover {
+    background: #f0f4ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.2);
+}
+
+.word-placeholder.editing {
+    border-color: #4caf50;
+    background: #f1f8f4;
+    cursor: text;
+}
+
+.word-placeholder.correct {
+    border-color: #4caf50;
+    background: #f1f8f4;
+    color: #4caf50;
+}
+
+.word-placeholder.incorrect {
+    border-color: #f44336;
+    background: #fff5f5;
+    color: #f44336;
+}
+
+.word-input {
+    display: inline-block;
+    padding: 12px 18px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    background: white;
+    border: 2px solid #4caf50;
+    border-radius: 8px;
+    outline: none;
+    min-width: 60px;
+    text-align: center;
+    font-family: inherit;
+}
+
+.word-input:focus {
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+
+.english-text {
+    font-size: 18px;
+    color: #555;
+    text-align: center;
+    font-style: italic;
+    padding: 15px;
+    background: #fff5e6;
+    border-radius: 8px;
+    border-left: 4px solid #ffa500;
+}
+
+.input-container {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    align-items: center;
+}
+
+.check-btn {
+    padding: 15px 30px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.check-btn:hover {
+    background: #5568d3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.check-btn:active {
+    transform: translateY(0);
+}
+
+.result {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    padding: 15px;
+    border-radius: 10px;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.result.correct {
+    color: #4caf50;
+    background: #f1f8f4;
+}
+
+.result.incorrect {
+    color: #f44336;
+    background: #fff5f5;
+}
+
+.correct-answer {
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+    padding: 15px;
+    background: #f7f9fc;
+    border-radius: 10px;
+    font-weight: 500;
+    display: none;
+}
+
+.correct-answer.show {
+    display: block;
+}
+
+.controls {
+    padding: 20px 40px 40px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.next-btn, .restart-btn {
+    padding: 15px 30px;
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.next-btn:hover, .restart-btn:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+.restart-btn {
+    background: #ff9800;
+}
+
+.restart-btn:hover {
+    background: #f57c00;
+}
+
+@media (max-width: 600px) {
+    header h1 {
+        font-size: 24px;
+    }
+    
+    .card {
+        padding: 25px;
+    }
+    
+    .word-placeholder {
+        font-size: 18px;
+        padding: 10px 14px;
+    }
+    
+    .word-input {
+        font-size: 18px;
+        padding: 10px 14px;
+    }
+    
+    .english-text {
+        font-size: 16px;
+    }
+}
+
