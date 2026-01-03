@@ -233,8 +233,19 @@ function startEditingWord(placeholderElement, index) {
     input.focus();
     input.select();
     
+    // Flag to prevent double execution of finishEditing
+    let isFinishing = false;
+    
     // Handle input completion
-    const finishEditing = () => {
+    const finishEditing = (callback) => {
+        // Prevent double execution
+        if (isFinishing) return;
+        
+        // Check if input still exists in DOM (might have been replaced already)
+        if (!input.parentNode) return;
+        
+        isFinishing = true;
+        
         const userWord = input.value.trim();
         const newPlaceholder = document.createElement('span');
         newPlaceholder.className = 'word-placeholder';
@@ -300,18 +311,70 @@ function startEditingWord(placeholderElement, index) {
         
         // Update wordElements array
         wordElements[index] = newPlaceholder;
+        
+        // Reset flag after a short delay
+        setTimeout(() => {
+            isFinishing = false;
+        }, 100);
+        
+        // Execute callback after DOM update if provided
+        if (callback) {
+            // Use setTimeout to ensure DOM is fully updated
+            setTimeout(callback, 0);
+        }
     };
     
-    input.addEventListener('blur', finishEditing);
+    input.addEventListener('blur', () => finishEditing());
     input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
+        if (e.key === 'Enter') {
             e.preventDefault();
             finishEditing();
+        } else if (e.key === ' ') {
+            e.preventDefault();
+            // Call finishEditing with callback to move to next word
+            // The isFinishing flag will prevent blur handler from running again
+            finishEditing(() => {
+                // Move to next editable word after DOM update
+                moveToNextWord(index);
+            });
         } else if (e.key === 'Escape') {
             input.value = '';
             finishEditing();
         }
     });
+}
+
+// Move to next editable word
+function moveToNextWord(currentIndex) {
+    if (currentCardAnswered) return;
+    
+    // Get all word placeholder elements from the DOM (more reliable than array)
+    const allPlaceholders = Array.from(wordsContainer.querySelectorAll('.word-placeholder'));
+    
+    // Find the next editable word after currentIndex
+    for (let i = 0; i < allPlaceholders.length; i++) {
+        const element = allPlaceholders[i];
+        const elementIndex = parseInt(element.dataset.index);
+        
+        // Only check elements after the current index
+        if (elementIndex <= currentIndex) {
+            continue;
+        }
+        
+        // Check if element is editable (has a word to fill in)
+        const correctWord = element.dataset.correctWord;
+        if (correctWord && correctWord.length > 0) {
+            // Check if element is not disabled (pointerEvents check)
+            const pointerEvents = window.getComputedStyle(element).pointerEvents;
+            if (pointerEvents !== 'none') {
+                // Found next editable word, start editing it
+                startEditingWord(element, elementIndex);
+                return;
+            }
+        }
+    }
+    
+    // If no next editable word found, focus stays on current word
 }
 
 // Load a card
@@ -372,11 +435,19 @@ function getUserAnswer() {
     wordElements.forEach((element) => {
         const userInput = element.dataset.userInput || '';
         const punctuation = element.dataset.punctuation || '';
+        const correctWord = element.dataset.correctWord || '';
         
+        // If element has user input (editable word was filled)
         if (userInput) {
             words.push(userInput + punctuation);
+        } 
+        // If element has no correctWord (non-editable like numbers/symbols), include it as-is
+        else if (!correctWord || correctWord.length === 0) {
+            // This is a non-editable element (punctuation, numbers, symbols)
+            // Include it in the answer so comparison works correctly
+            words.push(punctuation);
         }
-        // If no user input, don't include empty words
+        // If no user input and it's an editable word, skip it (not filled in)
     });
     return words.join(' ').trim();
 }
@@ -400,9 +471,13 @@ function checkAnswer() {
         const userWord = (element.dataset.userInput || '').toLowerCase().trim();
         const correctWordData = correctWords[index];
         
-        // Skip punctuation-only elements
-        if (!correctWordData || !correctWordData.word) return;
+        // Skip punctuation-only elements (numbers, symbols, etc.) - these are non-editable
+        if (!correctWordData || !correctWordData.word || correctWordData.word.length === 0) {
+            // This is a non-editable element, don't check it
+            return;
+        }
         
+        // Only check editable words
         const correctWord = correctWordData.word.toLowerCase();
         if (userWord === correctWord) {
             element.classList.add('correct');
